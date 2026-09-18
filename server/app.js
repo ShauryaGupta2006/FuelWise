@@ -8,15 +8,17 @@ const authRoutes = require("./src/routes/authRoutes");
 const User = require("./src/models/user");
 
 app.use(cors({
-    origin: true, // Allow all origins for dev / specified frontend URL
+    origin: true, 
     credentials: true,
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Auth Routes
+
 app.use("/auth", authRoutes);
-app.use("/", authRoutes); // Allows /signup and /login directly as well
+app.use("/", authRoutes); 
+
 
 app.get("/", (req, res) => {
     res.send("FuelWise Server Initiated Successfully");
@@ -27,7 +29,7 @@ app.post("/add_fuel", async (req, res) => {
         console.log("Request Body:", req.body);
         const { email, odometer, new_range, old_range, fuel, amount, density } = req.body;
         const targetEmail = (email || "[EMAIL_ADDRESS]").toLowerCase();
-        const fuelAmount = Number(amount) || 0;
+        console.log("Fuel record received for:", targetEmail, { odometer, new_range, old_range, fuel, amount, density });
 
         console.log("Fuel record received for:", targetEmail, { odometer, new_range, old_range, fuel, amount: fuelAmount, density });
 
@@ -41,8 +43,8 @@ app.post("/add_fuel", async (req, res) => {
                         new_range: Number(new_range),
                         old_range: Number(old_range),
                         quantity: Number(fuel),
-                        fueling_amount: fuelAmount,
-                        density: density || "",
+                        fueling_amount: Number(amount),
+                        density: density,
                     },
                 },
             },
@@ -69,7 +71,7 @@ app.get("/fuel_summary", async (req, res) => {
     try {
         const { email } = req.query;
         const targetEmail = (email || "[EMAIL_ADDRESS]").toLowerCase();
-        
+
         const user = await User.findOne({ email: targetEmail }).select("-password");
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
@@ -82,7 +84,6 @@ app.get("/fuel_summary", async (req, res) => {
                 email: user.email,
                 vehicleName: user.vehicleName,
                 fuelType: user.fuelType,
-                Total_fuel_cost: user.Total_fuel_cost || 0,
             },
             records: user.fuelRecords || [],
         });
