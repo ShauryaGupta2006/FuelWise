@@ -7,8 +7,9 @@ const authRoutes = require("./src/routes/authRoutes");
 
 const User = require("./src/models/user");
 
+const allowedOrigins = process.env.CLIENT_URL || process.env.FRONTEND_URL;
 app.use(cors({
-    origin: true, 
+    origin: allowedOrigins ? allowedOrigins.split(",").map(url => url.trim()) : true, 
     credentials: true,
 }));
 
@@ -29,8 +30,7 @@ app.post("/add_fuel", async (req, res) => {
         console.log("Request Body:", req.body);
         const { email, odometer, new_range, old_range, fuel, amount, density } = req.body;
         const targetEmail = (email || "[EMAIL_ADDRESS]").toLowerCase();
-        console.log("Fuel record received for:", targetEmail, { odometer, new_range, old_range, fuel, amount, density });
-
+        const fuelAmount = Number(amount) || 0;
         console.log("Fuel record received for:", targetEmail, { odometer, new_range, old_range, fuel, amount: fuelAmount, density });
 
         const updatedUser = await User.findOneAndUpdate(

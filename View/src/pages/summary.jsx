@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { getBackendUrl } from '../config/api';
 import { 
     Fuel, 
     Wallet, 
@@ -44,7 +45,7 @@ function Summary() {
         setError('');
 
         try {
-            const backendUrl = import.meta.env.VITE_BACKEND_URI || import.meta.env.VITE_BACKEND_URL;
+            const backendUrl = getBackendUrl();
             const emailParam = userEmail ? `?email=${encodeURIComponent(userEmail)}` : '';
             const response = await fetch(`${backendUrl}/fuel_summary${emailParam}`);
 

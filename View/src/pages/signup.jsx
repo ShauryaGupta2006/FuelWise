@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Fuel, User, Mail, Lock, Car, UserPlus, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { getBackendUrl } from '../config/api';
 
 function Signup() {
     const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ function Signup() {
         setLoading(true);
 
         try {
-            const backendUrl = import.meta.env.VITE_BACKEND_URI || import.meta.env.VITE_BACKEND_URL;
+            const backendUrl = getBackendUrl();
             const response = await fetch(`${backendUrl}/auth/signup`, {
                 method: 'POST',
                 headers: {

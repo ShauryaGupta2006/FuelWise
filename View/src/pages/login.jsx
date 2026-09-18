@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Fuel, Mail, Lock, LogIn, AlertCircle } from 'lucide-react';
+import { getBackendUrl } from '../config/api';
 
 function Login() {
     const [formData, setFormData] = useState({
@@ -21,7 +22,7 @@ function Login() {
         setLoading(true);
 
         try {
-            const backendUrl = import.meta.env.VITE_BACKEND_URI || import.meta.env.VITE_BACKEND_URL;
+            const backendUrl = getBackendUrl();
             const response = await fetch(`${backendUrl}/auth/login`, {
                 method: 'POST',
                 headers: {

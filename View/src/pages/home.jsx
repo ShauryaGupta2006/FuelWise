@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { getBackendUrl } from '../config/api';
 import { 
     Gauge, 
     Fuel, 
@@ -58,7 +59,7 @@ function Home() {
         setSubmitting(true);
 
         try {
-            const backendUrl = import.meta.env.VITE_BACKEND_URI || import.meta.env.VITE_BACKEND_URL;
+            const backendUrl = getBackendUrl();
             const payload = {
                 ...formData,
                 email: user?.email || '',
